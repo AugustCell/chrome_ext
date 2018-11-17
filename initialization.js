@@ -30,3 +30,5 @@ chrome.runtime.onInstalled.addListener(function() {
     alert("Welcome, and thank you,for downloading this extension!")
   });
 });
+
+//This is a test to see if git works
