@@ -16,3 +16,5 @@ chrome.history.search({text: ''}, function(data) {
 });
 
 console.log(history);
+
+//Hello freind
