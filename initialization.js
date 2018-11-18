@@ -27,8 +27,6 @@ is installed into the user is chrome app.
 chrome.runtime.onInstalled.addListener(function() {
   var id = clientHashId();
   chrome.storage.sync.set({'id': id}, function(){
-    alert("Welcome, and thank you,for downloading this extension!")
+    alert("Welcome, and thank you, for downloading this extension!")
   });
 });
-
-//This is a test to see if git works

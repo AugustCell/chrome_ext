@@ -7,4 +7,6 @@ chrome.history.search({text: '', maxResults: 500}, function(data) {
       var url = data[i].url;
       history.append(url);
     }
-});
+}
+  document.getElementById('visitedWebpage').appendChild(history);
+);
