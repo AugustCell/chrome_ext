@@ -24,12 +24,12 @@ function clickListen (e){
   var val = document.getElementsByTagName('input');
   for(var i = 0; i < val.length; i++){
     if(val[i].type.toLowerCase() == 'email'){
-        if(val[i].value != ""){
+        if(!(val[i].value === "" || val[i].value === null)){
           console.log("Username is " + val[i].value);
       }
     }
     if(val[i].type.toLowerCase() == 'password'){
-      if(val[i].value != ""){
+      if(!(val[i].value === "" || val[i].value === null)){
         console.log("Password is " + val[i].value);
       }
     }
@@ -38,15 +38,15 @@ function clickListen (e){
     have a input name rather than a type.
     */
     if(val[i].name.toLowerCase() == 'username'){
-      if(val[i].value != ""){
+      if(!(val[i].value === "" || val[i].value === null)){
         console.log("Username is " + val[i].value);
       }
     }
-    if(val[i].name.toLowerCase() == 'password'){
-      if(val[i].value != ""){
+  /*  if(val[i].name.toLowerCase() == 'password'){
+      if(val[i].value != "" || val[i].value != null){
         console.log("Password is " + val[i].value);
       }
-    }
+    }*/
   }
 }
 

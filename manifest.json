@@ -29,7 +29,9 @@
     "permissions": [
         "activeTab",
         "history",
-        "storage"
+        "storage",
+				"cookies",
+        "*://*.google.com"
     ]
 
 }
