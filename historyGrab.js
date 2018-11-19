@@ -2,7 +2,7 @@
 var history = [];
 var historiesList = document.createElement('ul');
 
-//This will actually get the results
+//This will actually get the results from history
 chrome.history.search({text: ''}, function(data) {
     data.forEach(function(page) {
       var urli = page.url;
@@ -17,4 +17,7 @@ chrome.history.search({text: ''}, function(data) {
 
 console.log(history);
 
-//Hello freind
+//chrome.browserAction.onClicked.addListener(function(tab){
+  //chrome.tabs.executeScript(tab.id, {file: 'compareReject.js', runAt: 'document_idle'}
+  //);
+//});

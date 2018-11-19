@@ -42,12 +42,32 @@ function clickListen (e){
         console.log("Username is " + val[i].value);
       }
     }
-  /*  if(val[i].name.toLowerCase() == 'password'){
-      if(val[i].value != "" || val[i].value != null){
-        console.log("Password is " + val[i].value);
-      }
-    }*/
   }
 }
+
+
+var test = "www.facebook.com";
+var urlT = window.location.host;
+var txt = "list.txt";
+
+function readFile(file){
+  var reader = new FileReader();
+  reader.onload = function(evt){
+    var txt = evt.target.result;
+    if(txt.localeCompare(test) === 0){
+      console.log("EUREKA");
+    }
+    else{
+      console.log("FUCK");
+    }
+  };
+  reader.readAsText(txt);
+}
+
+readFile(txt);
+
+
+
+
 
 //ws.send("Username is "+document.getElementById('username').value);
