@@ -1,9 +1,12 @@
 //Verify if it is operating or not
 console.log("Background script is currently running!");
-var webArr = ["norton", "bitdefender"];
+var webArr = ["norton", "bitdefender", "eset", "webrootanywhere",
+"kaspersky", "pandasecurity", "trendmicro", "avg", "avast", "avira",
+"f-secure", "sophos", "mcafee", "checkpoint", "totalav", "scanguard",
+"bullguard", "emsisoft", "comodo", "symantec", ];
 
 /*
-This function will be used to createa unique client
+This function will be used to creat ea unique client
 id for each person who downloads the extension. This
 works by making a random integer array, and making a
 256 bit array. This will then be sent through a crypto
