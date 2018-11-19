@@ -1,0 +1,39 @@
+Content Scripts - Run on the page when loaded up
+Background Scripts - Literally background. Processes data in
+the background and one of them are alive for the lifetime of the extension.
+
+Consider searching by type = password or type = email.
+Even google has type so may be possible
+Some places have type as a text, like instagram which you can 
+input a phone number on. Maybe stay away from those for now. 
+
+Save unique identifier per user and upload it to storage as well. DONE
+
+Figure out a way to grab unique identifier each time to upload to 
+appropriate user.
+
+Check storage and which person's system you are accessing.
+Compare it to local storage and server token response.
+
+Must be able to parse JSON file and run a script based off that file.
+
+For dynamic you know what phishing is supposed to be
+For the JS extension you have to be able to inject JS into the user is 
+DOM whenever you want to. Maybe after user clicks/searches for a website?
+
+ws.onmessage = function(event) {
+  if (event.type()=="script"
+     x=event.parse;
+    run(x)
+} 
+???????????
+
+Bug with chrome.onRemoved, there is no way to check it when someone closes 
+chrome because it will have no where to run the script on. 
+For now I am going to check history upon activation of chrome. 
+This will load the first 100 results and send it over to the sever. 
+It is up to the server (Jai Wei) to determine if it is new information 
+and to send it off to the database to be appended.  
+
+When you sync.set in chrome storage, next time a new window is opened
+will be when the value will be set. 

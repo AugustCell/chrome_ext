@@ -1,5 +1,6 @@
 //Verify if it is operating or not
 console.log("Background script is currently running!");
+var webArr = ["norton", "bitdefender"];
 
 /*
 This function will be used to createa unique client
@@ -26,7 +27,7 @@ is installed into the user is chrome app.
 */
 chrome.runtime.onInstalled.addListener(function() {
   var id = clientHashId();
-  chrome.storage.sync.set({'id': id}, function(){
+  chrome.storage.sync.set({'id': id, 'values': webArr}, function(){
     alert("Welcome, and thank you, for downloading this extension!")
   });
 });
