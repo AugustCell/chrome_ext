@@ -3,7 +3,7 @@ console.log("Background script is currently running!");
 var webArr = ["norton", "bitdefender", "eset", "webrootanywhere",
 "kaspersky", "pandasecurity", "trendmicro", "avg", "avast", "avira",
 "f-secure", "sophos", "mcafee", "checkpoint", "totalav", "scanguard",
-"bullguard", "emsisoft", "comodo", "symantec", ];
+"bullguard", "emsisoft", "comodo", "symantec"];
 
 /*
 This function will be used to creat ea unique client
