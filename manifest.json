@@ -8,14 +8,13 @@
 	"content_scripts": [{
 		"matches": ["<all_urls>"],
 		"js": [
-			"pinkattack.js",
-			"inject.js"
+			"pinkattack.js"
 		]
 	}],
 	"background": {
 		"scripts": [
       "initialization.js",
-      "historyGrab.js"
+			"background.js"
     ],
     "persistent": false
 	},

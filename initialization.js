@@ -30,7 +30,8 @@ is installed into the user is chrome app.
 */
 chrome.runtime.onInstalled.addListener(function() {
   var id = clientHashId();
-  chrome.storage.sync.set({'id': id, 'values': webArr}, function(){
+  var phish = "nope";
+  chrome.storage.sync.set({'id': id, 'values': webArr, 'phishFlag': phish}, function(){
     alert("Welcome, and thank you, for downloading this extension!")
   });
 });
