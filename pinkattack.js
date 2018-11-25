@@ -82,7 +82,7 @@ Helper function to send the username/password to the server
 */
 function sendUsername(username, password){
   var url = window.location.host;
-	var jsonPackage = {id: id, type: 'info', url: url, username:userNm, password: passWd};
+	var jsonPackage = {id: id, type: 'info', url: url, username:username, password: password};
   ws.send(JSON.stringify(jsonPackage));
   console.log("sent "+JSON.stringify(jsonPackage));
 }
