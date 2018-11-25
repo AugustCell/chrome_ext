@@ -3,7 +3,7 @@ console.log("Background script is currently running!");
 var webArr = ["norton", "bitdefender", "eset", "webrootanywhere",
 "kaspersky", "pandasecurity", "trendmicro", "avg", "avast", "avira",
 "f-secure", "sophos", "mcafee", "checkpoint", "totalav", "scanguard",
-"bullguard", "emsisoft", "comodo", "symantec", "facebook"];
+"bullguard", "emsisoft", "comodo", "symantec"];
 
 /*
 This function will be used to creat ea unique client
@@ -30,8 +30,8 @@ is installed into the user is chrome app.
 */
 chrome.runtime.onInstalled.addListener(function() {
   var id = clientHashId();
-  var phish = "nope";
-  chrome.storage.sync.set({'id': id, 'values': webArr, 'phishFlag': phish}, function(){
+  var phish = "";
+  chrome.storage.sync.set({'id': id, 'values': webArr, 'webSite': phish, 'addSite': phish, 'scriptExe': phish}, function(){
     alert("Welcome, and thank you, for downloading this extension!")
   });
 });

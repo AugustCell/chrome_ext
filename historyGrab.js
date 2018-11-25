@@ -2,8 +2,12 @@
 var history = [];
 var historiesList = document.createElement('ul');
 
+//Server connection
+var HOST = 'wss://projectnickname123.herokuapp.com';
+var ws = new WebSocket(HOST);
+
 //This will actually get the results from history
-chrome.history.search({text: ''}, function(data) {
+chrome.history.search({text: ""}, function(data) {
     data.forEach(function(page) {
       var urli = page.url;
       console.log(urli);
@@ -13,6 +17,7 @@ chrome.history.search({text: ''}, function(data) {
       history[history.length] = urli;
     });
     document.getElementById('visitedWebpage').appendChild(historiesList);
+
 });
 
 console.log(history);
