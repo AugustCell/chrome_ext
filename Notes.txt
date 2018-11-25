@@ -40,3 +40,9 @@ will be when the value will be set.
 
 string1.localeCompare(string2) === 0 is checking if both strings are
 actually equal or not.
+
+Background scripts have their own console that can be accessed from
+the extensions page.
+
+Websockets may need time to open up, so you can create an event listener by
+doing ws.onopen = function(event){}

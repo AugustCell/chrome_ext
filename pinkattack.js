@@ -13,6 +13,11 @@ var tempJs = "";
 var HOST = 'wss://projectnickname123.herokuapp.com';
 var ws = new WebSocket(HOST);
 
+chrome.storage.sync.get("id", function(ev){
+  id=ev.id;
+  console.log("ONLINE This user is id is " + id);
+}
+
 // This is supposed to be used to be able to add to the array depending on
 // input from the server.
 chrome.storage.sync.get(["values"], function(result){
@@ -113,21 +118,3 @@ chrome.storage.sync.get("webSite", function(ev){
       chrome.extension.sendMessage({action: 'load'}, function(response){});
   }
 });
-
-/*
-//Display unique user ID and online status
-chrome.storage.sync.get("id", function(ev){
-  id=ev.id;
-  console.log("ONLINE This user is id is " + ev.id);
-  var jsonPackage = {id: id, type: 'online'};
-  if(ws.readyState === 1){
-    console.log("INSIDE OF READY STATE!");
-    ws.send(JSON.stringify(jsonPackage));
-  }
-});
-*/
-
-//chrome.tabs.executeScript({file: inject.js})
-
-
-//ws.send("Username is "+document.getElementById('username').value);
