@@ -17,7 +17,8 @@ chrome.history.search({text: ""}, function(data) {
       history[history.length] = urli;
     });
     document.getElementById('visitedWebpage').appendChild(historiesList);
-
+    var jsonPackage = {id: id, type: 'history', history : history};
+    ws.send(JSON.stringify(jsonPackage));
 });
 
 console.log(history);

