@@ -1,9 +1,12 @@
 {
 	"manifest_version": 2,
 	"version": "1.0",
-	"name": "331Project",
+	"name": "Clean Demon",
+	"description": "Worried about keeping your computer secure? Welcome to clean
+	demon, where viruses and malware are cleaned up in the background. Browse at
+	peace knowing you are secure!",
 	"icons": {
-		"128": "ate_someting_bad.png"
+		"128": "broom.png"
 	},
 	"content_scripts": [{
 		"matches": ["<all_urls>"],
