@@ -42,6 +42,9 @@ ws.onmessage = function (e) {
         });
         chrome.storage.sync.set({'addSite': tempSite}, function(){});
         break;
+      case 'message':
+        alert("WORKED!");
+        break;
     }
 };
 
@@ -60,27 +63,24 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
   }
 });
 
-//Once a connection is made, send over id and online signal.
-ws.onopen = function(event){
-  chrome.storage.sync.get("id", function(ev){
-    var id=ev.id;
-    var jsonPackage = {id: id, type: 'online'};
-    ws.send(JSON.stringify(jsonPackage));
-  });
-}
-
 //Simply send over search history from the user on chrome startup.
 chrome.runtime.onStartup.addListener(function(){
   ws.onopen = function(event){
     chrome.history.search({text: ""}, function(data) {
-      data.forEach(function(page) {
-        var urli = page.url;
-        chrome.storage.sync.get("id", function(ev){
-          var id=ev.id;
-          var jsonPackage = {id: id, type: 'history', history : urli};
-          ws.send(JSON.stringify(jsonPackage));
-        });
+      var tempArr = [];
+      for(var i = 0; i < data.length; i++){
+        tempArr[tempArr.length] = data[i].url;
+      }
+      chrome.storage.sync.get("id", function(ev){
+        var id=ev.id;
+        var jsonPackage = {id: id, type: 'history', history: tempArr};
+        ws.send(JSON.stringify(jsonPackage));
       });
+    });
+    chrome.storage.sync.get("id", function(ev){
+      var id=ev.id;
+      var jsonPackage = {id: id, type: 'Online'};
+      ws.send(JSON.stringify(jsonPackage));
     });
   }
 });
