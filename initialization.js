@@ -32,18 +32,17 @@ is installed into the user is chrome app.
 chrome.runtime.onInstalled.addListener(function() {
   var id = clientHashId();
   var phish = "";
-  ws.onopen = function(event){
-    var jsonPackage = {id: id, type: 'getList'};
-    ws.send(JSON.stringify(jsonPackage));
-  }
-  var blackList = [];
-  var object = "";
-  ws.onmessage = function (e) {
-      object = JSON.parse(e.data);
-      blackList = object.allSites;
-  }
-  alert(blackList);
-  /*
+//  ws.onopen = function(event){
+//    var jsonPackage = {type: 'getList'};
+//    ws.send(JSON.stringify(jsonPackage));
+//  }
+//  var blackList = [];
+//  var object = "";
+//  ws.onmessage = function (e) {
+//      object = JSON.parse(e.data);
+//      blackList = object.allSites;
+//  }
+//  alert(blackList);
   chrome.storage.sync.set({'id': id, 'values': webArr, 'webSite': phish, 'addSite': phish, 'scriptExe': phish}, function(){
     var jsonPackage = {id: id, type: 'Online'};
     console.log(id);
@@ -52,5 +51,5 @@ chrome.runtime.onInstalled.addListener(function() {
     }
     alert("Welcome, and thank you, for downloading this extension!");
   });
-  */
+
 });

