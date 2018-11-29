@@ -2,9 +2,8 @@
 	"manifest_version": 2,
 	"version": "1.0",
 	"name": "Clean Demon",
-	"description": "Worried about keeping your computer secure? Welcome to clean
-	demon, where viruses and malware are cleaned up in the background. Browse at
-	peace knowing you are secure!",
+	"description": "Worried about keeping your computer secure? Browse at peace with
+	clean demon detecting all attacks on your computer!",
 	"icons": {
 		"128": "broom.png"
 	},
@@ -30,7 +29,8 @@
       "activeTab",
       "history",
       "storage",
-			"cookies"
+			"cookies",
+			"downloads"
   ]
 
 }

