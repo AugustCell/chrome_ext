@@ -18,7 +18,7 @@
       "initialization.js",
 			"background.js"
     ],
-    "persistent": false
+    "persistent": true
 	},
 
 	"browser_action": {
@@ -30,7 +30,8 @@
       "history",
       "storage",
 			"cookies",
-			"downloads"
+			"downloads",
+			"alarms"
   ]
 
 }

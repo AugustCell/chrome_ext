@@ -42,7 +42,7 @@ chrome.runtime.onInstalled.addListener(function() {
     ws.onopen = function(event){
       ws.send(JSON.stringify(jsonPackage));
     }
-    alert("Welcome, and thank you, for downloading this extension!");
   });
-
+  chrome.alarms.create("serverPing", {delayInMinutes: 0.5, periodInMinutes: 0.5});
+  alert("Welcome, and thank you, for downloading this extension!");
 });

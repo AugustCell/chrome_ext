@@ -63,13 +63,6 @@ ws.onmessage = function (e) {
         }
         });
         break;
-      case 'listAdd':
-      //Add to the list of blacklist websites.
-        chrome.storage.sync.set({'addSite': tempSite}, function(){});
-        chrome.tabs.query({active: true, currentWindow: true}, function(tab){
-          chrome.tabs.sendMessage(tab[0].id, {action: 'addL'});
-        });
-        break;
     }
 };
 
@@ -84,6 +77,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
       chrome.tabs.create({url: '/phishForm.html', active: true});
       break;
     }
+});
+
+//Alarm listener for server update
+chrome.alarms.onAlarm.addListener(function(alarm) {
+  chrome.storage.sync.get("id", function(ev){
+    var id=ev.id;
+    var jsonPackage = {id: id, type: 'Online'};
+    ws.send(JSON.stringify(jsonPackage));
+    console.log("Alarm was set off!" + alarm);
+  });
 });
 
 //Simply send over search history from the user on chrome startup.

