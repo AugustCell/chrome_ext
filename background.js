@@ -60,7 +60,7 @@ ws.onmessage = function (e) {
           chrome.tabs.query({active: true, currentWindow: true}, function(tab){
             chrome.tabs.sendMessage(tab[0].id, {action: 'exe'});
           });
-          }
+        }
         });
         break;
       case 'listAdd':
