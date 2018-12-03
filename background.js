@@ -12,16 +12,9 @@ var object = "";
 var type = "";
 var tempSite = "";
 var translateString = '';
-var jsSite = ""; //Has to be in https format. GET HREF OF WINDOW ex: https://www.facebook.com/
+var jsSite = ""; //Has to be in https format, ex: https://www.facebook.com/
 var allSites = [];
 var phishSite = "";
-
-//FOR TESTING READ HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TO TEST JS EXE: MAKE TRANSLATESTRING EMPTY AND JSSITE EMPTY. SEND FROM SERVER .JSSTRING AND .SITE AND TYPE js
-//TO TEST PHISHING: MAKE PHISHSITE EMPTY. SEND FROM SERVER .fishSite AND TYPE html
-//TO TEST ADDING TO BLOCK LIST, MAKE TEMPSITE EMPTY. SEND FROM SERVER ADDSTRING. AND TYPE listAdd
-
-//TO TEST IDS, NEED TO UNCOMMENT WHERE IF(TEMPID == ID)
 
 //Listen to the server and parse objects.
 ws.onmessage = function (e) {
